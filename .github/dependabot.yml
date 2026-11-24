@@ -15,6 +15,9 @@ updates:
         update-types: ["version-update:semver-major"]
       # LibVLC version is also referenced in assets/licenses/VideoLAN.txt
       - dependency-name: "org.videolan.android:libvlc-all"
+      # 1.5+ requires minSdk 23; we must stay on minSdk 22 for Fire OS 5.
+      - dependency-name: "androidx.annotation:annotation-experimental"
+        versions: [">=1.5.0"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
