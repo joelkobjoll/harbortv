@@ -26,15 +26,15 @@ jobs:
     outputs:
       signed: ${{ steps.keystore.outputs.signed }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
         with:
           packages: 'platforms;android-35 build-tools;35.0.0 platform-tools'
 
@@ -76,7 +76,7 @@ jobs:
           rm -rf site
           scripts/prepare-update-feed.sh app/build/outputs/apk/release/app-release.apk site
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         continue-on-error: true
         with:
           name: HarborTV-${{ steps.version.outputs.name }}-${{ steps.version.outputs.code }}
@@ -103,7 +103,7 @@ jobs:
 
       - name: Upload Pages site
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && steps.keystore.outputs.signed == 'true' && !github.event.repository.private
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
@@ -121,4 +121,4 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
