@@ -6,10 +6,10 @@
 2. Add a `CHANGELOG.md` entry.
 3. Merge to `main`.
 
-CI then:
+CI (on the self-hosted runner `unraid-harbortv`, Docker container `github-runner-harbortv` on the Unraid server) then:
 - builds `app-release.apk` signed with the release key,
 - runs `scripts/prepare-update-feed.sh` to create `HarborTV.apk`, `HarborTV-<code>-<sha12>.apk`, `update.json` and `index.html`,
-- deploys that folder to GitHub Pages: <https://joelkobjoll.github.io/harbortv/>,
+- deploys that folder to GitHub Pages: <https://joelkobjoll.github.io/harbortv/> (only while the repo is public; Pages is not available for this private repo on the current plan),
 - creates GitHub Release `v<VERSION_NAME>` with the APK attached (once per version).
 
 Boxes check the feed on launch and offer the update. Pushes to `main` that do not bump `VERSION_CODE` redeploy the same version, so boxes ignore them.
