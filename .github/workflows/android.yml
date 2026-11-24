@@ -68,13 +68,13 @@ jobs:
         if: always()
         run: rm -f "$RUNNER_TEMP/release.jks"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: HarborTV-${{ steps.version.outputs.name }}-${{ steps.version.outputs.code }}
           path: site/HarborTV.apk
           retention-days: 30
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: lint-report
           path: app/build/reports/lint-results-release.html
