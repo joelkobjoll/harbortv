@@ -1,9 +1,12 @@
 name: Android
 
+# Builds run on the self-hosted runner on Joel's Unraid server (labels: harbortv).
+# It keeps ~/.gradle and the Android SDK between runs, so builds are fast and
+# do not use GitHub-hosted minutes.
+
 on:
   push:
     branches: [main]
-    tags: ['v*']
   pull_request:
   workflow_dispatch:
 
@@ -16,11 +19,11 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    runs-on: [self-hosted, harbortv]
+    timeout-minutes: 45
+    permissions:
+      contents: write   # create the GitHub Release on main
     outputs:
-      version_code: ${{ steps.version.outputs.code }}
-      version_name: ${{ steps.version.outputs.name }}
       signed: ${{ steps.keystore.outputs.signed }}
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +33,10 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - uses: gradle/actions/setup-gradle@v4
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-35 build-tools;35.0.0 platform-tools'
 
       - name: Read version
         id: version
@@ -61,39 +67,52 @@ jobs:
           HARBOR_KEY_PASSWORD: ${{ secrets.HARBOR_KEY_PASSWORD }}
         run: ./gradlew --no-daemon :app:assembleRelease :app:lintRelease
 
-      - name: Prepare update feed
-        run: scripts/prepare-update-feed.sh app/build/outputs/apk/release/app-release.apk site
-
       - name: Remove keystore
         if: always()
         run: rm -f "$RUNNER_TEMP/release.jks"
 
+      - name: Prepare update feed
+        run: |
+          rm -rf site
+          scripts/prepare-update-feed.sh app/build/outputs/apk/release/app-release.apk site
+
       - uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
           name: HarborTV-${{ steps.version.outputs.name }}-${{ steps.version.outputs.code }}
           path: site/HarborTV.apk
-          retention-days: 30
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: lint-report
-          path: app/build/reports/lint-results-release.html
-          if-no-files-found: ignore
           retention-days: 14
 
-      - name: Upload Pages site
+      # One GitHub Release per version (tag v<VERSION_NAME>), created the first
+      # time that version reaches main.
+      - name: Create release if new
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && steps.keystore.outputs.signed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ steps.version.outputs.name }}
+          CODE: ${{ steps.version.outputs.code }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists, skipping."
+          else
+            gh release create "$TAG" site/HarborTV.apk site/update.json \
+              --title "Harbor TV $TAG (build $CODE)" \
+              --notes "Built from ${GITHUB_SHA}. See CHANGELOG.md." \
+              --target "$GITHUB_SHA"
+          fi
+
+      - name: Upload Pages site
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && steps.keystore.outputs.signed == 'true' && !github.event.repository.private
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
-  # Publishes HarborTV.apk + update.json to GitHub Pages. Boxes only install an
-  # update when VERSION_CODE is higher than what they run, so pushes that do not
-  # bump the version are harmless.
+  # Publishes HarborTV.apk + update.json to GitHub Pages (public repo only).
+  # Boxes only install an update when VERSION_CODE is higher than what they run.
   publish-feed:
     needs: build
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.build.outputs.signed == 'true'
-    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.build.outputs.signed == 'true' && !github.event.repository.private
+    runs-on: [self-hosted, harbortv]
     permissions:
       pages: write
       id-token: write
@@ -103,32 +122,3 @@ jobs:
     steps:
       - id: deploy
         uses: actions/deploy-pages@v4
-
-  # Creates a GitHub Release (tag v<VERSION_NAME>) the first time a version
-  # reaches main, so every shipped build is archived.
-  release:
-    needs: [build, publish-feed]
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: HarborTV-${{ needs.build.outputs.version_name }}-${{ needs.build.outputs.version_code }}
-          path: dist
-      - name: Create release if new
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: v${{ needs.build.outputs.version_name }}
-          CODE: ${{ needs.build.outputs.version_code }}
-        run: |
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Release $TAG already exists, skipping."
-            exit 0
-          fi
-          gh release create "$TAG" dist/HarborTV.apk \
-            --title "Harbor TV $TAG (build $CODE)" \
-            --notes "Built from ${GITHUB_SHA}. See CHANGELOG.md." \
-            --target "$GITHUB_SHA"
