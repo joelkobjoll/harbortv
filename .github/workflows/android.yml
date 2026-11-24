@@ -23,7 +23,7 @@ jobs:
       version_name: ${{ steps.version.outputs.name }}
       signed: ${{ steps.keystore.outputs.signed }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-java@v4
         with:
@@ -113,7 +113,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/download-artifact@v4
         with:
           name: HarborTV-${{ needs.build.outputs.version_name }}-${{ needs.build.outputs.version_code }}
