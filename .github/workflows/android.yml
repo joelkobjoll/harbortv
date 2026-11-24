@@ -102,7 +102,7 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   # Creates a GitHub Release (tag v<VERSION_NAME>) the first time a version
   # reaches main, so every shipped build is archived.
