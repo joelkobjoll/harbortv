@@ -1,0 +1,12 @@
+This application uses LibVLC-Android 3.6.5 from VideoLAN.
+LibVLC-Android is distributed under the GNU Lesser General Public License, version 2.1.
+The license text is included in LGPL-2.1.txt.
+
+Published Android bindings and sources
+https://repo.maven.apache.org/maven2/org/videolan/android/libvlc-all/3.6.5/
+
+Upstream Android bindings and native build sources
+https://code.videolan.org/videolan/libvlcjni
+https://code.videolan.org/videolan/vlc
+
+Harbor TV links to the unmodified VideoLAN library declared in app/build.gradle.

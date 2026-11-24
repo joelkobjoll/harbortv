@@ -1,0 +1,65 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+// Release signing comes from environment variables (set by CI from GitHub
+// secrets) so no keystore or password is ever committed. Without them, release
+// builds fall back to the local debug key, which is fine for testing but cannot
+// update boxes running the official build.
+def keystoreFile = System.getenv('HARBOR_KEYSTORE_FILE')
+def hasReleaseKey = keystoreFile && file(keystoreFile).exists()
+
+android {
+    namespace 'com.harbortv.client'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.harbortv.client'
+        minSdk 22
+        targetSdk 34
+        versionCode Integer.parseInt(project.property('VERSION_CODE'))
+        versionName project.property('VERSION_NAME')
+        buildConfigField 'String', 'DEFAULT_UPDATE_FEED', "\"${project.property('UPDATE_FEED_URL')}\""
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    signingConfigs {
+        release {
+            if (hasReleaseKey) {
+                storeFile file(keystoreFile)
+                storePassword System.getenv('HARBOR_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('HARBOR_KEY_ALIAS')
+                keyPassword System.getenv('HARBOR_KEY_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig hasReleaseKey ? signingConfigs.release : signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation libs.androidx.annotation
+    implementation libs.androidx.annotation.experimental
+    implementation libs.androidx.core // FileProvider used by AppUpdater
+    implementation libs.media3.exoplayer
+    implementation libs.media3.exoplayer.hls
+    implementation libs.media3.ui
+    implementation libs.libvlc
+}

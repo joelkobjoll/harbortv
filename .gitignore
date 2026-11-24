@@ -1,0 +1,23 @@
+# Gradle / Android Studio
+.gradle/
+.idea/
+*.iml
+local.properties
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Release output (published by CI, never committed)
+/update-feed/
+*.apk
+*.aab
+
+# Signing material: never commit
+*.jks
+*.keystore
+keystore.properties
+
+# OS
+.DS_Store
+Thumbs.db
