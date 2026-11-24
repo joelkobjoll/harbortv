@@ -1,6 +1,6 @@
 [versions]
-agp = "8.7.3"
-androidx-annotation = "1.8.1"
+agp = "8.13.2"
+androidx-annotation = "1.11.0"
 androidx-annotation-experimental = "1.4.1"
 androidx-core = "1.13.1"
 media3 = "1.5.1"
