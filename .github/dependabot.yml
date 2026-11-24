@@ -1,13 +1,24 @@
 version: 2
 updates:
+  # Minor/patch only: major upgrades (AGP, Gradle, Media3, LibVLC) need a
+  # device test pass on Fire TV and are done by hand.
   - package-ecosystem: gradle
     directory: /
     schedule:
       interval: monthly
+    open-pull-requests-limit: 3
     groups:
-      androidx:
-        patterns: ["androidx.*"]
+      gradle-minor:
+        update-types: [minor, patch]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      # LibVLC version is also referenced in assets/licenses/VideoLAN.txt
+      - dependency-name: "org.videolan.android:libvlc-all"
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
