@@ -1,10 +1,10 @@
 <resources>
     <style name="HarborTheme" parent="android:style/Theme.Material.NoActionBar">
         <item name="android:fontFamily">sans-serif</item>
-        <item name="android:colorAccent">#64E4C4</item>
-        <item name="android:windowBackground">#101A26</item>
-        <item name="android:statusBarColor">#101A26</item>
-        <item name="android:navigationBarColor">#101A26</item>
+        <item name="android:colorAccent">#FFD34E</item>
+        <item name="android:windowBackground">#24100F</item>
+        <item name="android:statusBarColor">#24100F</item>
+        <item name="android:navigationBarColor">#24100F</item>
     </style>
     <style name="HarborPlayer" parent="HarborTheme">
         <item name="android:windowFullscreen">true</item>
