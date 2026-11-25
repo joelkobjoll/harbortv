@@ -72,8 +72,8 @@ public final class MainActivity extends Activity {
     private static final String DISPLAY_SIZE = "displaySize";
     private static final String REOPEN_PORTAL = "reopenPortalAfterDisplayChange";
     private static final int[] DISPLAY_SIZES = {100, 90, 80, 70};
-    private static final int ACCENT = 0xffffd34e;
-    private static final int MUTED = 0xffffcfad;
+    private static final int MINT = 0xff64e4c4;
+    private static final int MUTED = 0xffbbcedc;
     private final ExecutorService requests = Executors.newSingleThreadExecutor();
     private final ExecutorService guideRequests = Executors.newSingleThreadExecutor();
     private final Handler main = new Handler(Looper.getMainLooper());
@@ -265,7 +265,7 @@ public final class MainActivity extends Activity {
         content = layout();
         scroll.addView(content);
         setContentView(scroll);
-        text("Harbor TV", 32, ACCENT);
+        text("Harbor TV", 32, MINT);
         text("Portal settings", 21, Color.WHITE);
         JSONObject fields = profile == null ? new JSONObject() : profile;
         portalName = field("Portal name", "e.g. Home TV", fields.optString("name"), InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
@@ -391,7 +391,7 @@ public final class MainActivity extends Activity {
         content = layout();
         content.setGravity(android.view.Gravity.CENTER);
         setContentView(content);
-        TextView loading = text("Connecting to " + profileLabel(profile) + "…", 22, ACCENT);
+        TextView loading = text("Connecting to " + profileLabel(profile) + "…", 22, MINT);
         loading.setGravity(android.view.Gravity.CENTER);
         ProgressBar progress = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
         progress.setMax(100);
@@ -472,17 +472,17 @@ public final class MainActivity extends Activity {
         LinearLayout secondary = new LinearLayout(this);
         tiles.addView(primary, new LinearLayout.LayoutParams(-1, 0, 1));
         tiles.addView(secondary, new LinearLayout.LayoutParams(-1, 0, 1));
-        homeTile(primary, "TV", android.R.drawable.ic_media_play, 0xff963329,
+        homeTile(primary, "TV", android.R.drawable.ic_media_play, 0xff205b68,
                 () -> showChannelCategories(portal, channels, home)).requestFocus();
-        homeTile(primary, "Movies", android.R.drawable.ic_menu_slideshow, 0xff85252b,
+        homeTile(primary, "Movies", android.R.drawable.ic_menu_slideshow, 0xff633e60,
                 () -> showCategories(portal, "vod", "Movies", home));
-        homeTile(primary, "Series", android.R.drawable.ic_menu_view, 0xff7a2520,
+        homeTile(primary, "Series", android.R.drawable.ic_menu_view, 0xff41497b,
                 () -> showCategories(portal, "series", "Series", home));
-        homeTile(secondary, "TV Guide", android.R.drawable.ic_menu_agenda, 0xff702b25,
+        homeTile(secondary, "TV Guide", android.R.drawable.ic_menu_agenda, 0xff2c506e,
                 () -> showGuideChannels(portal, channels, false, home));
-        homeTile(secondary, "Catch-up", android.R.drawable.ic_menu_recent_history, 0xff854421,
+        homeTile(secondary, "Catch-up", android.R.drawable.ic_menu_recent_history, 0xff665133,
                 () -> showGuideChannels(portal, channels, true, home));
-        homeTile(secondary, "Portal settings", android.R.drawable.ic_menu_preferences, 0xff662822,
+        homeTile(secondary, "Portal settings", android.R.drawable.ic_menu_preferences, 0xff384a5b,
                 () -> {
                     showSetup();
                     backAction = home;
@@ -515,9 +515,9 @@ public final class MainActivity extends Activity {
     }
 
     private LayerDrawable raisedTileFace(int color, boolean focused) {
-        GradientDrawable edge = tileFace(0xff572622, 0xff190909);
-        GradientDrawable face = tileFace(color, focused ? 0xff6c2b22 : 0xff311514);
-        face.setStroke(dp(focused ? 2 : 1), focused ? ACCENT : 0x80d67855);
+        GradientDrawable edge = tileFace(0xff263749, 0xff09131f);
+        GradientDrawable face = tileFace(color, focused ? 0xff254154 : 0xff172638);
+        face.setStroke(dp(focused ? 2 : 1), focused ? MINT : 0x807fa5b8);
         LayerDrawable tile = new LayerDrawable(new android.graphics.drawable.Drawable[] {edge, face});
         tile.setLayerInset(1, 0, 0, 0, dp(5));
         return tile;
@@ -556,7 +556,7 @@ public final class MainActivity extends Activity {
             homeButton.setTextSize(23);
             homeButton.setLayoutParams(new LinearLayout.LayoutParams(dp(48), dp(44)));
         }
-        TextView heading = label(category == null ? "Live TV" : category, 32, ACCENT);
+        TextView heading = label(category == null ? "Live TV" : category, 32, MINT);
         heading.setSingleLine(true);
         heading.setEllipsize(TextUtils.TruncateAt.END);
         channelTitle.addView(heading, new LinearLayout.LayoutParams(0, -2, 1));
@@ -641,7 +641,7 @@ public final class MainActivity extends Activity {
         LinearLayout right = new LinearLayout(this);
         right.setOrientation(LinearLayout.VERTICAL);
         right.setPadding(dp(12), dp(8), dp(12), dp(8));
-        right.setBackground(panelBackground(0xff311514));
+        right.setBackground(panelBackground(0xff172638));
         LinearLayout.LayoutParams rightSize = narrow ? new LinearLayout.LayoutParams(-1, 0, 1)
                 : new LinearLayout.LayoutParams(0, -1, 1.35f);
         if (narrow) rightSize.topMargin = dp(8);
@@ -752,15 +752,15 @@ public final class MainActivity extends Activity {
         button.setOnClickListener(view -> open.run());
         button.setFocusable(true);
         StateListDrawable background = new StateListDrawable();
-        background.addState(new int[] {android.R.attr.state_focused}, panelBackground(ACCENT));
-        background.addState(new int[0], panelBackground(0xff622922));
+        background.addState(new int[] {android.R.attr.state_focused}, panelBackground(MINT));
+        background.addState(new int[0], panelBackground(0xff284254));
         button.setBackground(background);
         button.setPadding(0, 0, 0, 0);
         button.setScaleType(ImageView.ScaleType.CENTER);
         button.setImageResource(icon);
         button.setImageTintList(new ColorStateList(
                 new int[][] {{android.R.attr.state_focused}, {}},
-                new int[] {0xff24100f, Color.WHITE}));
+                new int[] {0xff101a26, Color.WHITE}));
         LinearLayout.LayoutParams size = new LinearLayout.LayoutParams(dp(42), dp(38));
         size.leftMargin = dp(4);
         row.addView(button, size);
@@ -771,7 +771,7 @@ public final class MainActivity extends Activity {
         String number = channel.number.isEmpty() ? "" : channel.number + "   ";
         if (!channel.archive) return number + channel.name;
         SpannableString label = new SpannableString(number + "↶  " + channel.name);
-        label.setSpan(new ForegroundColorSpan(ACCENT), number.length(), number.length() + 1, 0);
+        label.setSpan(new ForegroundColorSpan(MINT), number.length(), number.length() + 1, 0);
         return label;
     }
 
@@ -853,7 +853,7 @@ public final class MainActivity extends Activity {
 
     private void renderPreview(Portal.Channel channel, LinearLayout rows, List<JSONObject> programmes, String feedback) {
         rows.removeAllViews();
-        rows.addView(label(channel.name + "  •  Now & next", 16, ACCENT));
+        rows.addView(label(channel.name + "  •  Now & next", 16, MINT));
         if (programmes == null) {
             rows.addView(label(feedback, 14, MUTED));
             return;
@@ -1085,7 +1085,7 @@ public final class MainActivity extends Activity {
             preview.setId(View.generateViewId());
             preview.setFocusable(true);
             preview.setFillViewport(true);
-            preview.setBackground(panelBackground(0xff311514));
+            preview.setBackground(panelBackground(0xff172638));
             preview.setNextFocusLeftId(list.getId());
             list.setNextFocusRightId(preview.getId());
             LinearLayout.LayoutParams previewSize = new LinearLayout.LayoutParams(0, -1, 1);
@@ -1108,7 +1108,7 @@ public final class MainActivity extends Activity {
             copy.setPadding(dp(12), 0, 0, 0);
             detail.addView(copy, new LinearLayout.LayoutParams(0, -2, 1));
             previewTitle = label("", 22, Color.WHITE);
-            previewMetadata = label("", 15, ACCENT);
+            previewMetadata = label("", 15, MINT);
             previewDate = label("", 14, MUTED);
             previewSynopsis = label("", 16, Color.WHITE);
             previewTitle.setPadding(0, 0, 0, dp(4));
@@ -1121,7 +1121,7 @@ public final class MainActivity extends Activity {
             previewExtras.setPadding(dp(16), 0, dp(16), dp(12));
             body.addView(previewExtras, new LinearLayout.LayoutParams(-1, -2));
             View divider = new View(MainActivity.this);
-            divider.setBackgroundColor(0x40ffd34e);
+            divider.setBackgroundColor(0x407db5bf);
             previewExtras.addView(divider, new LinearLayout.LayoutParams(-1, dp(1)));
             previewCredits = label("", 15, Color.WHITE);
             previewExtras.addView(previewCredits);
@@ -1268,7 +1268,7 @@ public final class MainActivity extends Activity {
         content.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
         LinearLayout detail = new LinearLayout(this);
         detail.setPadding(dp(14), dp(14), dp(14), dp(14));
-        detail.setBackground(panelBackground(0xff311514));
+        detail.setBackground(panelBackground(0xff172638));
         scroll.addView(detail);
         ImageView cover = newPoster();
         detail.addView(cover, new LinearLayout.LayoutParams(dp(115), dp(172)));
@@ -1278,7 +1278,7 @@ public final class MainActivity extends Activity {
         copy.setPadding(dp(16), 0, 0, 0);
         detail.addView(copy, new LinearLayout.LayoutParams(0, -2, 1));
         String info = titleMetadata(item);
-        if (!info.isEmpty()) copy.addView(label(info, 15, ACCENT));
+        if (!info.isEmpty()) copy.addView(label(info, 15, MINT));
         String added = dateAdded(item);
         if (!added.isEmpty()) copy.addView(label("Added " + added, 14, MUTED));
         String synopsis = description(item);
@@ -1307,7 +1307,7 @@ public final class MainActivity extends Activity {
             styleRaisedTitle(title);
             title.setMaxLines(2);
             title.setEllipsize(TextUtils.TruncateAt.END);
-            metadata = label("", 14, ACCENT);
+            metadata = label("", 14, MINT);
             description = label("", 15, MUTED);
             description.setMaxLines(2);
             description.setEllipsize(TextUtils.TruncateAt.END);
@@ -1320,7 +1320,7 @@ public final class MainActivity extends Activity {
     private ImageView newPoster() {
         ImageView poster = new ImageView(this);
         poster.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        poster.setBackground(panelBackground(0xff532520));
+        poster.setBackground(panelBackground(0xff294057));
         poster.setClipToOutline(true);
         poster.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         return poster;
@@ -1475,9 +1475,9 @@ public final class MainActivity extends Activity {
         LinearLayout listings = new LinearLayout(this);
         listings.setOrientation(LinearLayout.VERTICAL);
         listings.setPadding(dp(14), 0, dp(6), 0);
-        listings.setBackground(panelBackground(0xff311514));
+        listings.setBackground(panelBackground(0xff172638));
         columns.addView(listings, new LinearLayout.LayoutParams(0, -1, 2.1f));
-        listings.addView(label(weekday.format(date.getTime()), 19, ACCENT));
+        listings.addView(label(weekday.format(date.getTime()), 19, MINT));
         dates.requestFocus();
         dates.setSelection(day - firstDay);
 
@@ -1552,7 +1552,7 @@ public final class MainActivity extends Activity {
             arrow.setPadding(0, 0, 0, 0);
             arrow.setLayoutParams(new LinearLayout.LayoutParams(dp(48), dp(44)));
             arrow.requestFocus();
-            TextView heading = label(title, 24, ACCENT);
+            TextView heading = label(title, 24, MINT);
             heading.setSingleLine(true);
             heading.setEllipsize(TextUtils.TruncateAt.END);
             heading.setPadding(dp(8), 0, dp(8), 0);
@@ -1561,7 +1561,7 @@ public final class MainActivity extends Activity {
             status.setMaxWidth(dp(getResources().getConfiguration().screenWidthDp / 2));
             header.addView(status);
         } else {
-            text(title, 27, ACCENT);
+            text(title, 27, MINT);
             button("Back", view -> back.run()).requestFocus();
             status = text("", 16, MUTED);
         }
@@ -1642,11 +1642,11 @@ public final class MainActivity extends Activity {
 
     private void styleList(ListView list, boolean modern) {
         if (!modern) {
-            list.setSelector(new ColorDrawable(0xff713129));
+            list.setSelector(new ColorDrawable(0xff27534e));
             return;
         }
-        GradientDrawable highlight = panelBackground(0x55ffd34e);
-        highlight.setStroke(dp(2), ACCENT);
+        GradientDrawable highlight = panelBackground(0x554facaa);
+        highlight.setStroke(dp(2), MINT);
         list.setSelector(highlight);
         list.setDrawSelectorOnTop(true);
         list.setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -1654,7 +1654,7 @@ public final class MainActivity extends Activity {
     }
 
     private void styleListRow(View row, int position) {
-        row.setBackground(panelBackground(position % 2 == 0 ? 0xff471c19 : 0xff51211c));
+        row.setBackground(panelBackground(position % 2 == 0 ? 0xff203547 : 0xff263b50));
     }
 
     private interface PortalTask<T> {
@@ -1781,10 +1781,10 @@ public final class MainActivity extends Activity {
         button.setAllCaps(false);
         button.setTextColor(new ColorStateList(
                 new int[][] {{android.R.attr.state_focused}, {}},
-                new int[] {0xff24100f, Color.WHITE}));
+                new int[] {0xff101a26, Color.WHITE}));
         button.setBackgroundTintList(new ColorStateList(
                 new int[][] {{android.R.attr.state_focused}, {}},
-                new int[] {ACCENT, 0xff622922}));
+                new int[] {MINT, 0xff284254}));
         button.setOnClickListener(listener);
         row.addView(button, new LinearLayout.LayoutParams(-2, -2));
         return button;
