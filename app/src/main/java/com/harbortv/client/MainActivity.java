@@ -107,7 +107,10 @@ public final class MainActivity extends Activity {
 
     @Override
     protected void attachBaseContext(Context base) {
-        int size = base.getSharedPreferences("portal", MODE_PRIVATE).getInt(DISPLAY_SIZE, 100);
+        // Fire OS can query the Activity's resources during a preference lookup.
+        // At this point only the application context is fully attached.
+        int size = base.getApplicationContext()
+                .getSharedPreferences("portal", MODE_PRIVATE).getInt(DISPLAY_SIZE, 100);
         if (size >= 70 && size < 100) {
             Configuration override = new Configuration();
             override.densityDpi = Math.round(base.getResources().getDisplayMetrics().densityDpi * size / 100f);
