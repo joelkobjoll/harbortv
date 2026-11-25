@@ -517,7 +517,7 @@ public final class MainActivity extends Activity {
     private LayerDrawable raisedTileFace(int color, boolean focused) {
         GradientDrawable edge = tileFace(0xff572622, 0xff190909);
         GradientDrawable face = tileFace(color, focused ? 0xff6c2b22 : 0xff311514);
-        face.setStroke(dp(focused ? 2 : 1), focused ? ACCENT : 0x807fa5b8);
+        face.setStroke(dp(focused ? 2 : 1), focused ? ACCENT : 0x80d67855);
         LayerDrawable tile = new LayerDrawable(new android.graphics.drawable.Drawable[] {edge, face});
         tile.setLayerInset(1, 0, 0, 0, dp(5));
         return tile;
@@ -1121,7 +1121,7 @@ public final class MainActivity extends Activity {
             previewExtras.setPadding(dp(16), 0, dp(16), dp(12));
             body.addView(previewExtras, new LinearLayout.LayoutParams(-1, -2));
             View divider = new View(MainActivity.this);
-            divider.setBackgroundColor(0x407db5bf);
+            divider.setBackgroundColor(0x40ffd34e);
             previewExtras.addView(divider, new LinearLayout.LayoutParams(-1, dp(1)));
             previewCredits = label("", 15, Color.WHITE);
             previewExtras.addView(previewCredits);
@@ -1645,7 +1645,7 @@ public final class MainActivity extends Activity {
             list.setSelector(new ColorDrawable(0xff713129));
             return;
         }
-        GradientDrawable highlight = panelBackground(0x554facaa);
+        GradientDrawable highlight = panelBackground(0x55ffd34e);
         highlight.setStroke(dp(2), ACCENT);
         list.setSelector(highlight);
         list.setDrawSelectorOnTop(true);
