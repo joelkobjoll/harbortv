@@ -86,6 +86,7 @@ jobs:
       # One GitHub Release per version (tag v<VERSION_NAME>), created the first
       # time that version reaches main.
       - name: Create release if new
+        continue-on-error: true # Pages can deploy the signed APK if the Releases API is unavailable.
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && steps.keystore.outputs.signed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
