@@ -13,6 +13,10 @@ All notable changes are listed here. Versions match `VERSION_NAME` / `VERSION_CO
 - Official builds are now signed with a new release key. Boxes on 1.45 (debug-signed) must uninstall and reinstall once.
 - `androidx.core` declared explicitly (it was only available transitively).
 
+## [1.48] (build 49)
+
+- Apply a red and yellow theme to TV, movies, series, the guide, settings, and launcher artwork.
+
 ## [1.47] (build 48)
 
 - Fix a startup crash when reading display settings on older Fire OS devices.
